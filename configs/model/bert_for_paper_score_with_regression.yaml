@@ -1,0 +1,8 @@
+# @package _group_
+
+_target_: src.models.BertForPaperScoreWithRegression
+pooling_method: "cls"
+pooling_without_special_tokens: True
+bert_model: ${bert_model}
+classifier_dropout: 0.1
+use_published_date: ${use_published_date}

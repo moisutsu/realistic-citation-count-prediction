@@ -1,0 +1,16 @@
+# @package _group_
+
+_target_: src.data.CitationCountRegressionDataModule
+batch_size: ${batch_size}
+dataset_dir: ${root_dataset_dir}/${dataset_name}
+tokenizer: "???"
+max_length: 512
+num_workers: "???"
+use_citation_score: True
+use_published_date: ${use_published_date}
+use_author_score: False
+author_score_label_count: 10
+use_trend_score: False
+trend_score_column_name: "degree_of_early_adoptions"
+trend_score_labels: [-1, 0, 1, 2, 3, 4, 5]
+use_elapsed_months_for_trend_score: [3, 6, 9, 12]

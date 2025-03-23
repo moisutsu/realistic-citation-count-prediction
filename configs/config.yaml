@@ -1,0 +1,93 @@
+# @package _global_
+
+# Global config
+bert_model: "bert-base-uncased"
+experiment_name: "Experiment"
+run_name: "Run"
+seed: 46
+gpus: [0]
+batch_size: 32
+dataset_name: "samples/full_text"
+test_names: ["test"]
+experiment_count: 3
+epochs: 3
+
+use_published_date: False
+resize_position_embeddings: False
+resize_token_embeddings: True
+save_model: False
+
+monitor: "valid_rank_correlation_for_callback"
+enable_early_stopping: False
+
+# Path
+work_dir: ${hydra:runtime.cwd}
+root_dataset_dir: ${work_dir}/dataset
+
+# For instantiate
+defaults:
+  - model: bert_for_paper_score_with_regression
+  - datamodule: citation_count_regression
+
+trainer:
+  _target_: pytorch_lightning.Trainer
+  max_epochs: ${epochs}
+  gpus: ${gpus}
+  reload_dataloaders_every_n_epochs: 1
+  logger: "???"
+  fast_dev_run: False
+  accumulate_grad_batches: 1
+  num_sanity_val_steps: 0
+  precision: 16
+
+tokenizer:
+  _target_: transformers.AutoTokenizer.from_pretrained
+  pretrained_model_name_or_path: ${bert_model}
+
+optimizer:
+  _target_: torch.optim.AdamW
+  params: "???"
+  lr: 2e-5
+
+logger:
+  _target_: pytorch_lightning.loggers.MLFlowLogger
+  experiment_name: ${experiment_name}
+  tracking_uri: file://${work_dir}/mlruns
+  tags: "???"
+
+early_stop_callback:
+  _target_: pytorch_lightning.callbacks.early_stopping.EarlyStopping
+  monitor: "???"
+  patience: 10
+  mode: "max"
+
+checkpoint_callback:
+  _target_: pytorch_lightning.callbacks.ModelCheckpoint
+  monitor: "???"
+  dirpath: "???"
+  filename: "{epoch:02d}"
+  mode: "max"
+  save_top_k: 0
+
+lr_scheduler:
+  _target_: src.lr_scheduler.create_lr_scheduler
+  method: "linear_warmup"
+  optimizer: "???"
+  dataset_length: "???"
+  batch_size: "???"
+  epochs: ${epochs}
+
+print_config: True
+
+hydra:
+  # output paths for hydra logs
+  run:
+    dir: logs/runs/${now:%Y-%m-%d}/${now:%H-%M-%S}
+  sweep:
+    dir: logs/multiruns/${now:%Y-%m}/${now:%d_%H-%M-%S}
+    subdir: ${hydra.job.num}
+
+  job:
+    env_set:
+      TOKENIZERS_PARALLELISM: "true"
+      HYDRA_FULL_ERROR: "1"
