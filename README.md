@@ -110,3 +110,22 @@ View the experiment results using MLflow:
 ```bash
 mlflow ui
 ```
+
+## Citation
+
+```bibtex
+@inproceedings{hirako-etal-2023-realistic,
+    title = "Realistic Citation Count Prediction Task for Newly Published Papers",
+    author = "Hirako, Jun  and
+      Sasano, Ryohei  and
+      Takeda, Koichi",
+    booktitle = "Findings of the Association for Computational Linguistics: EACL 2023",
+    month = may,
+    year = "2023",
+    address = "Dubrovnik, Croatia",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2023.findings-eacl.84/",
+    doi = "10.18653/v1/2023.findings-eacl.84",
+    pages = "1131--1141",
+}
+```
